@@ -14,7 +14,7 @@ papers = [
     ("2310.15110", "Zero123++"),
     ("2209.14988", "DreamFusion"),
     ("2211.10440", "Magic3D"),
-    ("2212.04490", "Point-E"),
+    ("2212.08751", "Point-E"),
 ]
 
 os.makedirs("data/papers", exist_ok=True)
