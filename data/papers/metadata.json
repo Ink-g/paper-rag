@@ -1,0 +1,137 @@
+[
+  {
+    "paper_id": "2006.11239",
+    "nickname": "DDPM",
+    "title": "Denoising Diffusion Probabilistic Models",
+    "authors": [
+      "Jonathan Ho",
+      "Ajay Jain",
+      "Pieter Abbeel"
+    ],
+    "year": 2020,
+    "abstract": "We present high quality image synthesis results using diffusion probabilistic models, a class of latent variable models inspired by considerations from nonequilibrium thermodynamics. Our best results are obtained by training on a weighted variational bound designed according to a novel connection between diffusion probabilistic models and denoising score matching with Langevin dynamics, and our models naturally admit a progressive lossy decompression scheme that can be interpreted as a generalization of autoregressive decoding. On the unconditional CIFAR10 dataset, we obtain an Inception score of 9.46 and a state-of-the-art FID score of 3.17. On 256x256 LSUN, we obtain sample quality similar to ProgressiveGAN. Our implementation is available at https://github.com/hojonathanho/diffusion",
+    "filename": "DDPM.pdf"
+  },
+  {
+    "paper_id": "2010.02502",
+    "nickname": "DDIM",
+    "title": "Denoising Diffusion Implicit Models",
+    "authors": [
+      "Jiaming Song",
+      "Chenlin Meng",
+      "Stefano Ermon"
+    ],
+    "year": 2020,
+    "abstract": "Denoising diffusion probabilistic models (DDPMs) have achieved high quality image generation without adversarial training, yet they require simulating a Markov chain for many steps to produce a sample. To accelerate sampling, we present denoising diffusion implicit models (DDIMs), a more efficient class of iterative implicit probabilistic models with the same training procedure as DDPMs. In DDPMs, the generative process is defined as the reverse of a Markovian diffusion process. We construct a class of non-Markovian diffusion processes that lead to the same training objective, but whose reverse process can be much faster to sample from. We empirically demonstrate that DDIMs can produce high quality samples $10 \\times$ to $50 \\times$ faster in terms of wall-clock time compared to DDPMs, allow us to trade off computation for sample quality, and can perform semantically meaningful image interpolation directly in the latent space.",
+    "filename": "DDIM.pdf"
+  },
+  {
+    "paper_id": "2207.12598",
+    "nickname": "CFG",
+    "title": "Classifier-Free Diffusion Guidance",
+    "authors": [
+      "Jonathan Ho",
+      "Tim Salimans"
+    ],
+    "year": 2022,
+    "abstract": "Classifier guidance is a recently introduced method to trade off mode coverage and sample fidelity in conditional diffusion models post training, in the same spirit as low temperature sampling or truncation in other types of generative models. Classifier guidance combines the score estimate of a diffusion model with the gradient of an image classifier and thereby requires training an image classifier separate from the diffusion model. It also raises the question of whether guidance can be performed without a classifier. We show that guidance can be indeed performed by a pure generative model without such a classifier: in what we call classifier-free guidance, we jointly train a conditional and an unconditional diffusion model, and we combine the resulting conditional and unconditional score estimates to attain a trade-off between sample quality and diversity similar to that obtained using classifier guidance.",
+    "filename": "CFG.pdf"
+  },
+  {
+    "paper_id": "2112.10752",
+    "nickname": "Stable Diffusion",
+    "title": "High-Resolution Image Synthesis with Latent Diffusion Models",
+    "authors": [
+      "Robin Rombach",
+      "Andreas Blattmann",
+      "Dominik Lorenz",
+      "Patrick Esser",
+      "Björn Ommer"
+    ],
+    "year": 2021,
+    "abstract": "By decomposing the image formation process into a sequential application of denoising autoencoders, diffusion models (DMs) achieve state-of-the-art synthesis results on image data and beyond. Additionally, their formulation allows for a guiding mechanism to control the image generation process without retraining. However, since these models typically operate directly in pixel space, optimization of powerful DMs often consumes hundreds of GPU days and inference is expensive due to sequential evaluations. To enable DM training on limited computational resources while retaining their quality and flexibility, we apply them in the latent space of powerful pretrained autoencoders. In contrast to previous work, training diffusion models on such a representation allows for the first time to reach a near-optimal point between complexity reduction and detail preservation, greatly boosting visual fidelity. By introducing cross-attention layers into the model architecture, we turn diffusion models into powerful and flexible generators for general conditioning inputs such as text or bounding boxes and high-resolution synthesis becomes possible in a convolutional manner. Our latent diffusion models (LDMs) achieve a new state of the art for image inpainting and highly competitive performance on various tasks, including unconditional image generation, semantic scene synthesis, and super-resolution, while significantly reducing computational requirements compared to pixel-based DMs. Code is available at https://github.com/CompVis/latent-diffusion .",
+    "filename": "Stable Diffusion.pdf"
+  },
+  {
+    "paper_id": "2303.11328",
+    "nickname": "Zero123",
+    "title": "Zero-1-to-3: Zero-shot One Image to 3D Object",
+    "authors": [
+      "Ruoshi Liu",
+      "Rundi Wu",
+      "Basile Van Hoorick",
+      "Pavel Tokmakov",
+      "Sergey Zakharov",
+      "Carl Vondrick"
+    ],
+    "year": 2023,
+    "abstract": "We introduce Zero-1-to-3, a framework for changing the camera viewpoint of an object given just a single RGB image. To perform novel view synthesis in this under-constrained setting, we capitalize on the geometric priors that large-scale diffusion models learn about natural images. Our conditional diffusion model uses a synthetic dataset to learn controls of the relative camera viewpoint, which allow new images to be generated of the same object under a specified camera transformation. Even though it is trained on a synthetic dataset, our model retains a strong zero-shot generalization ability to out-of-distribution datasets as well as in-the-wild images, including impressionist paintings. Our viewpoint-conditioned diffusion approach can further be used for the task of 3D reconstruction from a single image. Qualitative and quantitative experiments show that our method significantly outperforms state-of-the-art single-view 3D reconstruction and novel view synthesis models by leveraging Internet-scale pre-training.",
+    "filename": "Zero123.pdf"
+  },
+  {
+    "paper_id": "2310.15110",
+    "nickname": "Zero123++",
+    "title": "Zero123++: a Single Image to Consistent Multi-view Diffusion Base Model",
+    "authors": [
+      "Ruoxi Shi",
+      "Hansheng Chen",
+      "Zhuoyang Zhang",
+      "Minghua Liu",
+      "Chao Xu",
+      "Xinyue Wei",
+      "Linghao Chen",
+      "Chong Zeng",
+      "Hao Su"
+    ],
+    "year": 2023,
+    "abstract": "We report Zero123++, an image-conditioned diffusion model for generating 3D-consistent multi-view images from a single input view. To take full advantage of pretrained 2D generative priors, we develop various conditioning and training schemes to minimize the effort of finetuning from off-the-shelf image diffusion models such as Stable Diffusion. Zero123++ excels in producing high-quality, consistent multi-view images from a single image, overcoming common issues like texture degradation and geometric misalignment. Furthermore, we showcase the feasibility of training a ControlNet on Zero123++ for enhanced control over the generation process. The code is available at https://github.com/SUDO-AI-3D/zero123plus.",
+    "filename": "Zero123++.pdf"
+  },
+  {
+    "paper_id": "2209.14988",
+    "nickname": "DreamFusion",
+    "title": "DreamFusion: Text-to-3D using 2D Diffusion",
+    "authors": [
+      "Ben Poole",
+      "Ajay Jain",
+      "Jonathan T. Barron",
+      "Ben Mildenhall"
+    ],
+    "year": 2022,
+    "abstract": "Recent breakthroughs in text-to-image synthesis have been driven by diffusion models trained on billions of image-text pairs. Adapting this approach to 3D synthesis would require large-scale datasets of labeled 3D data and efficient architectures for denoising 3D data, neither of which currently exist. In this work, we circumvent these limitations by using a pretrained 2D text-to-image diffusion model to perform text-to-3D synthesis. We introduce a loss based on probability density distillation that enables the use of a 2D diffusion model as a prior for optimization of a parametric image generator. Using this loss in a DeepDream-like procedure, we optimize a randomly-initialized 3D model (a Neural Radiance Field, or NeRF) via gradient descent such that its 2D renderings from random angles achieve a low loss. The resulting 3D model of the given text can be viewed from any angle, relit by arbitrary illumination, or composited into any 3D environment. Our approach requires no 3D training data and no modifications to the image diffusion model, demonstrating the effectiveness of pretrained image diffusion models as priors.",
+    "filename": "DreamFusion.pdf"
+  },
+  {
+    "paper_id": "2211.10440",
+    "nickname": "Magic3D",
+    "title": "Magic3D: High-Resolution Text-to-3D Content Creation",
+    "authors": [
+      "Chen-Hsuan Lin",
+      "Jun Gao",
+      "Luming Tang",
+      "Towaki Takikawa",
+      "Xiaohui Zeng",
+      "Xun Huang",
+      "Karsten Kreis",
+      "Sanja Fidler",
+      "Ming-Yu Liu",
+      "Tsung-Yi Lin"
+    ],
+    "year": 2022,
+    "abstract": "DreamFusion has recently demonstrated the utility of a pre-trained text-to-image diffusion model to optimize Neural Radiance Fields (NeRF), achieving remarkable text-to-3D synthesis results. However, the method has two inherent limitations: (a) extremely slow optimization of NeRF and (b) low-resolution image space supervision on NeRF, leading to low-quality 3D models with a long processing time. In this paper, we address these limitations by utilizing a two-stage optimization framework. First, we obtain a coarse model using a low-resolution diffusion prior and accelerate with a sparse 3D hash grid structure. Using the coarse representation as the initialization, we further optimize a textured 3D mesh model with an efficient differentiable renderer interacting with a high-resolution latent diffusion model. Our method, dubbed Magic3D, can create high quality 3D mesh models in 40 minutes, which is 2x faster than DreamFusion (reportedly taking 1.5 hours on average), while also achieving higher resolution. User studies show 61.7% raters to prefer our approach over DreamFusion. Together with the image-conditioned generation capabilities, we provide users with new ways to control 3D synthesis, opening up new avenues to various creative applications.",
+    "filename": "Magic3D.pdf"
+  },
+  {
+    "paper_id": "2212.04490",
+    "nickname": "Point-E",
+    "title": "Loop-string-hadron formulation of an SU(3) gauge theory with dynamical quarks",
+    "authors": [
+      "Saurabh V. Kadam",
+      "Indrakshi Raychowdhury",
+      "Jesse R. Stryker"
+    ],
+    "year": 2022,
+    "abstract": "Towards the goal of quantum computing for lattice quantum chromodynamics, we present a loop-string-hadron (LSH) framework in 1+1 dimensions for describing the dynamics of SU(3) gauge fields coupled to staggered fermions. This novel framework was previously developed for an SU(2) lattice gauge theory in $d\\leq3$ spatial dimensions and its advantages for classical and quantum algorithms have thus far been demonstrated in $d=1$. The LSH approach uses gauge invariant degrees of freedoms such as loop segments, string ends, and on-site hadrons, it is free of all nonabelian gauge redundancy, and it is described by a Hamiltonian containing only local interactions. In this work, the SU(3) LSH framework is systematically derived from the reformulation of Hamiltonian lattice gauge theory in terms of irreducible Schwinger bosons, including the addition of staggered quarks. Furthermore, the superselection rules governing the LSH dynamics are identified directly from the form of the Hamiltonian. The SU(3) LSH Hamiltonian with open boundary conditions has been numerically confirmed to agree with the completely gauge-fixed Hamiltonian, which contains long-range interactions and does not generalize to either periodic boundary conditions or to $d>1$.",
+    "filename": "Point-E.pdf"
+  }
+]
