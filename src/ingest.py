@@ -3,6 +3,8 @@ import json
 import re
 import os
 from dataclasses import dataclass
+from sentence_transformers import SentenceTransformer
+import chromadb
 
 PAPERS_DIR = "data/papers"
 METADATA_PATH = "data/papers/metadata.json"
@@ -92,5 +94,26 @@ def ingest_all() -> list[Chunk]:
     return all_chunks
 
 
+def store_chunks(chunks: list[Chunk]):
+    print("\n加载 embedding 模型（首次运行会下载约 2GB，请耐心等待）...")
+    embed_model = SentenceTransformer("BAAI/bge-m3")
+
+    chroma_client = chromadb.PersistentClient(path="./storage")
+    collection = chroma_client.get_or_create_collection("papers")
+
+    print("正在生成向量并存入数据库...")
+    texts = [c.text for c in chunks]
+    embeddings = embed_model.encode(texts, show_progress_bar=True, batch_size=8)
+
+    collection.add(
+        documents=texts,
+        embeddings=embeddings.tolist(),
+        metadatas=[{"paper_id": c.paper_id, "title": c.title, "section": c.section} for c in chunks],
+        ids=[c.id for c in chunks]
+    )
+    print(f"完成，共存入 {len(chunks)} 个文本块。")
+
+
 if __name__ == "__main__":
     chunks = ingest_all()
+    store_chunks(chunks)
