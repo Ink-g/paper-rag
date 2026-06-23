@@ -16,7 +16,7 @@ def _get_embed_model():
 def _get_reranker():
     global _reranker
     if _reranker is None:
-        print("加载 Reranker 模型...")
+        print("Loading reranker model...")
         _reranker = CrossEncoder("BAAI/bge-reranker-v2-m3")
     return _reranker
 
@@ -35,7 +35,7 @@ def retrieve(question: str, top_k: int = 5) -> list[dict]:
 
     q_embedding = embed_model.encode(question)
 
-    # 先召回 20 个候选
+    # Retrieve 20 candidates, then rerank to top_k
     results = collection.query(
         query_embeddings=[q_embedding.tolist()],
         n_results=20
@@ -49,7 +49,6 @@ def retrieve(question: str, top_k: int = 5) -> list[dict]:
             "paper_id": results["metadatas"][0][i]["paper_id"],
         })
 
-    # Reranker 精排，取前 top_k
     reranker = _get_reranker()
     pairs = [(question, c["text"]) for c in candidates]
     scores = reranker.predict(pairs)

@@ -2,8 +2,8 @@ from sentence_transformers import SentenceTransformer, CrossEncoder
 import chromadb
 
 TEST_SET = [
-    # (问题, 正确来源论文的 nickname)
-    # 扩散模型基础
+    # (question, correct paper nickname)
+    # Diffusion model fundamentals
     ("What noise schedule does DDPM use during the forward process?", "DDPM"),
     ("How does DDPM define the reverse diffusion process?", "DDPM"),
     ("What is the training objective of DDPM?", "DDPM"),
@@ -14,7 +14,7 @@ TEST_SET = [
     ("How does guidance strength affect image generation quality?", "CFG"),
     ("What is the latent diffusion model in Stable Diffusion?", "Stable Diffusion"),
     ("How does Stable Diffusion use a VAE to compress images?", "Stable Diffusion"),
-    # 扩散模型应用
+    # Diffusion model applications
     ("How does ControlNet add spatial conditioning to diffusion models?", "ControlNet"),
     ("What is the zero convolution technique in ControlNet?", "ControlNet"),
     ("How does InstructPix2Pix edit images using text instructions?", "InstructPix2Pix"),
@@ -23,7 +23,7 @@ TEST_SET = [
     ("How does Imagen achieve photorealistic text-to-image generation?", "Imagen"),
     ("How does SDXL improve over the original Stable Diffusion?", "SDXL"),
     ("What is the two-stage pipeline in SDXL?", "SDXL"),
-    # 3D 生成
+    # 3D generation
     ("How does Zero123 control the camera viewpoint for novel view synthesis?", "Zero123"),
     ("What dataset does Zero123 use for training?", "Zero123"),
     ("How does Zero123++ improve multi-view consistency over Zero123?", "Zero123++"),
@@ -36,14 +36,14 @@ TEST_SET = [
     ("What is the clip-guided diffusion model in Point-E?", "Point-E"),
     ("How does Score Jacobian Chaining lift 2D diffusion priors to 3D?", "SJC"),
     ("What is the perturb-and-average scoring technique in SJC?", "SJC"),
-    # NeRF 系列
+    # NeRF series
     ("How does NeRF represent 3D scenes as neural radiance fields?", "NeRF"),
     ("What is the volume rendering equation used in NeRF?", "NeRF"),
     ("How does Instant-NGP use multiresolution hash encoding to speed up training?", "Instant-NGP"),
     ("What speedup does Instant-NGP achieve compared to original NeRF?", "Instant-NGP"),
     ("How does 3D Gaussian Splatting represent and render radiance fields?", "3DGS"),
     ("What is the tile-based rasterizer used in 3D Gaussian Splatting?", "3DGS"),
-    # 多视角生成
+    # Multi-view generation
     ("How does One-2-3-45 reconstruct a 3D mesh from a single image?", "One-2-3-45"),
     ("What is the role of Zero123 in the One-2-3-45 pipeline?", "One-2-3-45"),
     ("How does SyncDreamer ensure consistency across multiple generated views?", "SyncDreamer"),
@@ -118,14 +118,14 @@ def evaluate(use_reranker: bool, top_k: int = 5) -> float:
 
 
 if __name__ == "__main__":
-    print("评估中（不加 Reranker）...")
+    print("Evaluating (without reranker)...")
     score_base = evaluate(use_reranker=False)
 
-    print("评估中（加 Reranker）...")
+    print("Evaluating (with reranker)...")
     score_rerank = evaluate(use_reranker=True)
 
-    print("\n========== 评估结果 ==========")
-    print(f"Hit Rate@5（不加 Reranker）: {score_base:.1%}")
-    print(f"Hit Rate@5（加 Reranker）:   {score_rerank:.1%}")
-    print(f"提升:                        +{(score_rerank - score_base):.1%}")
-    print("================================")
+    print("\n========== Evaluation Results ==========")
+    print(f"Hit Rate@5 (without reranker): {score_base:.1%}")
+    print(f"Hit Rate@5 (with reranker):    {score_rerank:.1%}")
+    print(f"Improvement:                   +{(score_rerank - score_base):.1%}")
+    print("=========================================")

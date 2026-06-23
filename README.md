@@ -1,75 +1,75 @@
-# ML 论文助手
+# ML Paper Assistant
 
-基于 RAG（检索增强生成）技术的机器学习论文问答系统。输入问题，系统自动从论文库中检索相关内容，由本地大语言模型生成回答并标注来源论文。
+A RAG (Retrieval-Augmented Generation) system for machine learning research papers. Ask a question and the system retrieves relevant content from the paper corpus, generates an answer using a local LLM, and cites the source papers.
 
-## 论文库
+## Paper Corpus
 
-| 方向 | 论文 |
-|------|------|
-| 扩散模型基础 | DDPM、DDIM、CFG、Stable Diffusion |
-| 扩散模型应用 | ControlNet、InstructPix2Pix、Imagen、SDXL |
-| 3D 生成 | Zero123、Zero123++、DreamFusion、Magic3D、Point-E、SJC |
-| NeRF 系列 | NeRF、Instant-NGP、3D Gaussian Splatting |
-| 多视角生成 | One-2-3-45、SyncDreamer、Wonder3D |
+| Category | Papers |
+|----------|--------|
+| Diffusion Model Fundamentals | DDPM, DDIM, CFG, Stable Diffusion |
+| Diffusion Model Applications | ControlNet, InstructPix2Pix, Imagen, SDXL |
+| 3D Generation | Zero123, Zero123++, DreamFusion, Magic3D, Point-E, SJC |
+| NeRF Series | NeRF, Instant-NGP, 3D Gaussian Splatting |
+| Multi-view Generation | One-2-3-45, SyncDreamer, Wonder3D |
 
-## 技术架构
+## Architecture
 
 ```
-用户提问
+User question
    ↓
-bge-m3 将问题转为向量
+bge-m3 encodes question into vector
    ↓
-ChromaDB 向量检索，召回 20 个候选文本块
+ChromaDB vector search, retrieve 20 candidates
    ↓
-bge-reranker-v2-m3 精排，取 Top 5
+bge-reranker-v2-m3 reranks, select Top 5
    ↓
-Qwen2.5-7B（本地）生成回答
+Qwen2.5-7B (local) generates answer
    ↓
-返回答案 + 来源论文
+Return answer + source papers
 ```
 
-## 环境要求
+## Requirements
 
 - Python 3.11
 - Anaconda / Miniconda
-- Ollama（本地 LLM）
-- NVIDIA GPU（推荐，CPU 也可运行但较慢）
+- Ollama (local LLM)
+- NVIDIA GPU (recommended; CPU also works but slower)
 
 ---
 
-## 快速开始
+## Quick Start
 
-### 第一次使用
+### First-time Setup
 
-**1. 激活虚拟环境**
+**1. Activate the environment**
 
 ```powershell
 conda activate paper-rag
 ```
 
-**2. 启动 Ollama**
+**2. Start Ollama**
 
-Ollama 安装后会自动在后台运行。如果没有运行，打开 Ollama 应用即可。
-确认 Qwen 模型已下载：
+Ollama runs in the background after installation. If it's not running, open the Ollama app.
+Confirm the Qwen model is downloaded:
 
 ```powershell
 ollama pull qwen2.5:7b
 ```
 
-**3. 启动界面**
+**3. Launch the interface**
 
 ```powershell
 cd D:\Projects\paper-rag
 python app.py
 ```
 
-浏览器打开 `http://127.0.0.1:7860` 即可使用。
+Open `http://127.0.0.1:7860` in your browser.
 
 ---
 
-### 重新构建向量数据库
+### Rebuild the Vector Database
 
-如果 `storage/` 目录被删除，或新增了论文，需要重新入库：
+If the `storage/` directory is deleted or new papers are added:
 
 ```powershell
 conda activate paper-rag
@@ -77,64 +77,64 @@ cd D:\Projects\paper-rag
 python src/ingest.py
 ```
 
-首次运行会自动下载 bge-m3 模型（约 2GB），之后会缓存在本地。
+The bge-m3 model (~2GB) is downloaded on first run and cached locally.
 
 ---
 
-### 下载新论文
+### Download New Papers
 
-编辑 `data/download_papers.py`，在列表里添加新的 arxiv ID：
+Edit `data/download_papers.py` and add a new arxiv ID to the list:
 
 ```python
-("2303.11328", "Zero123"),   # arxiv ID, 自定义名称
+("2303.11328", "Zero123"),   # arxiv ID, custom name
 ```
 
-然后运行：
+Then run:
 
 ```powershell
 python data/download_papers.py
-python src/ingest.py          # 重新入库
+python src/ingest.py
 ```
 
 ---
 
-## 项目结构
+## Project Structure
 
 ```
 paper-rag/
 ├── data/
-│   ├── papers/              # PDF 文件和 metadata.json
-│   └── download_papers.py   # 论文下载脚本
-├── storage/                 # ChromaDB 向量数据库（本地，不进 git）
+│   ├── papers/              # PDF files and metadata.json
+│   └── download_papers.py   # Paper download script
+├── storage/                 # ChromaDB vector database (local, not in git)
 ├── src/
-│   ├── ingest.py            # PDF 解析、切块、向量入库
-│   ├── retriever.py         # 向量检索
-│   ├── pipeline.py          # RAG 主流程（检索 + 生成）
-│   └── evaluate.py          # 评估（待实现）
-├── app.py                   # Gradio 前端
-├── test_pipeline.py         # 命令行测试
-├── requirements.txt         # Python 依赖
-└── .env                     # API Key（不进 git）
+│   ├── ingest.py            # PDF parsing, chunking, embedding, storage
+│   ├── retriever.py         # Vector retrieval + reranking
+│   ├── pipeline.py          # RAG pipeline (retrieval + generation)
+│   └── evaluate.py          # Evaluation script (Hit Rate@5)
+├── app.py                   # Gradio frontend
+├── test_pipeline.py         # CLI testing
+├── requirements.txt         # Python dependencies
+└── .env                     # API keys (not in git)
 ```
 
-## 评估结果
+## Evaluation Results
 
-在 42 个手工标注的测试问题上评估检索质量（Hit Rate@5：正确论文出现在前 5 个检索结果中）：
+Hit Rate@5 evaluated on 42 manually annotated questions (correct paper appears in top 5 retrieved chunks):
 
-| 方法 | Hit Rate@5 |
-|------|-----------|
-| 向量检索（baseline） | 85.7% |
-| 向量检索 + Reranker | 90.5% |
+| Method | Hit Rate@5 |
+|--------|-----------|
+| Vector retrieval (baseline) | 85.7% |
+| Vector retrieval + Reranker | 90.5% |
 
-> 在 20 篇论文、217 个文本块的语料库上，Reranker 相比纯向量检索提升 4.8 个百分点。语料库规模越大，Reranker 的精排优势越明显。
+> On a 20-paper, 217-chunk corpus, the reranker improves over the baseline by 4.8 percentage points. The advantage of reranking becomes more pronounced as the corpus grows.
 
-## 常用命令速查
+## Common Commands
 
-| 操作 | 命令 |
-|------|------|
-| 激活环境 | `conda activate paper-rag` |
-| 启动界面 | `python app.py` |
-| 命令行提问 | `python test_pipeline.py` |
-| 重新入库 | `python src/ingest.py` |
-| 下载论文 | `python data/download_papers.py` |
-| 退出环境 | `conda deactivate` |
+| Action | Command |
+|--------|---------|
+| Activate environment | `conda activate paper-rag` |
+| Launch UI | `python app.py` |
+| CLI query | `python test_pipeline.py` |
+| Re-ingest papers | `python src/ingest.py` |
+| Download papers | `python data/download_papers.py` |
+| Deactivate environment | `conda deactivate` |

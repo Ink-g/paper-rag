@@ -30,7 +30,6 @@ def extract_text(pdf_path: str) -> str:
 
 
 def remove_references(text: str) -> str:
-    # 参考文献一般在最后，找到 "References" 标题后截断
     match = re.search(r'\n(References|REFERENCES|Bibliography)\n', text)
     if match:
         return text[:match.start()]
@@ -38,20 +37,17 @@ def remove_references(text: str) -> str:
 
 
 def split_into_chunks(text: str, chunk_size: int, overlap: int) -> list[str]:
-    # 按段落切分，段落之间有空行
     paragraphs = [p.strip() for p in re.split(r'\n\s*\n', text) if p.strip()]
 
     chunks = []
     current_chunk = ""
 
     for para in paragraphs:
-        # 如果加上这个段落还没超过 chunk_size，就继续拼
         if len(current_chunk) + len(para) < chunk_size:
             current_chunk += " " + para
         else:
             if current_chunk:
                 chunks.append(current_chunk.strip())
-            # 新 chunk 从上一个 chunk 的尾部开始（overlap），保留上下文
             current_chunk = current_chunk[-overlap:] + " " + para
 
     if current_chunk.strip():
@@ -69,10 +65,10 @@ def ingest_all() -> list[Chunk]:
     for paper in metadata:
         pdf_path = os.path.join(PAPERS_DIR, paper["filename"])
         if not os.path.exists(pdf_path):
-            print(f"找不到文件，跳过: {pdf_path}")
+            print(f"File not found, skipping: {pdf_path}")
             continue
 
-        print(f"处理: {paper['nickname']} - {paper['title']}")
+        print(f"Processing: {paper['nickname']} - {paper['title']}")
 
         text = extract_text(pdf_path)
         text = remove_references(text)
@@ -88,22 +84,22 @@ def ingest_all() -> list[Chunk]:
             )
             all_chunks.append(chunk)
 
-        print(f"  切成 {len(chunks)} 个文本块")
+        print(f"  -> {len(chunks)} chunks")
 
-    print(f"\n共处理 {len(metadata)} 篇论文，生成 {len(all_chunks)} 个文本块")
+    print(f"\nProcessed {len(metadata)} papers, generated {len(all_chunks)} chunks total")
     return all_chunks
 
 
 def store_chunks(chunks: list[Chunk]):
-    print("\n加载 embedding 模型（首次运行会下载约 2GB，请耐心等待）...")
+    print("\nLoading embedding model...")
     embed_model = SentenceTransformer("BAAI/bge-m3")
 
     chroma_client = chromadb.PersistentClient(path="./storage")
-    # 每次重新入库前清空旧数据，避免重复
+    # Clear existing data to avoid duplicates on re-ingest
     chroma_client.delete_collection("papers")
     collection = chroma_client.get_or_create_collection("papers")
 
-    print("正在生成向量并存入数据库...")
+    print("Generating embeddings and storing to database...")
     texts = [c.text for c in chunks]
     embeddings = embed_model.encode(texts, show_progress_bar=True, batch_size=8)
 
@@ -113,7 +109,7 @@ def store_chunks(chunks: list[Chunk]):
         metadatas=[{"paper_id": c.paper_id, "title": c.title, "section": c.section} for c in chunks],
         ids=[c.id for c in chunks]
     )
-    print(f"完成，共存入 {len(chunks)} 个文本块。")
+    print(f"Done. Stored {len(chunks)} chunks.")
 
 
 if __name__ == "__main__":

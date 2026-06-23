@@ -4,20 +4,20 @@ from src.pipeline import ask
 
 def chat(question: str, history: list) -> str:
     if not question.strip():
-        return "请输入问题。"
+        return "Please enter a question."
 
     answer, sources = ask(question)
 
     unique_sources = list({s["title"] for s in sources})
     source_text = "\n".join([f"- {title}" for title in unique_sources])
 
-    return f"{answer}\n\n**来源论文：**\n{source_text}"
+    return f"{answer}\n\n**Sources:**\n{source_text}"
 
 
 demo = gr.ChatInterface(
     fn=chat,
-    title="ML 论文助手",
-    description="基于 20 篇 ML 论文（扩散模型、NeRF、3D 生成等）的问答系统，支持向量检索 + Reranker 精排",
+    title="ML Paper Assistant",
+    description="RAG-powered Q&A over 20 ML papers (diffusion models, NeRF, 3D generation, etc.) with vector retrieval + reranker",
     examples=[
         "What is the main idea of DDPM and how does the denoising process work?",
         "How does ControlNet add spatial conditioning to diffusion models?",
