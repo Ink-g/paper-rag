@@ -19,11 +19,11 @@ demo = gr.ChatInterface(
     title="ML Paper Assistant",
     description="RAG-powered Q&A over 20 ML papers (diffusion models, NeRF, 3D generation, etc.) with vector retrieval + reranker",
     examples=[
-        "What is the main idea of DDPM and how does the denoising process work?",
-        "How does ControlNet add spatial conditioning to diffusion models?",
-        "What are the advantages of 3D Gaussian Splatting over NeRF?",
-        "What is classifier-free guidance and why is it useful?",
-        "How does DreamFusion generate 3D objects from text?",
+        "How does DDIM improve upon DDPM in terms of sampling speed?",
+        "What is the role of the VAE in Stable Diffusion and why is it used?",
+        "How does ControlNet add spatial conditioning without retraining the base model?",
+        "How does score distillation sampling work in DreamFusion?",
+        "What are the key differences between 3D Gaussian Splatting and NeRF?",
     ],
 )
 
