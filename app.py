@@ -17,15 +17,14 @@ def chat(question: str, history: list) -> str:
 demo = gr.ChatInterface(
     fn=chat,
     title="ML 论文助手",
-    description="基于 9 篇 ML 论文（DDPM、DDIM、Stable Diffusion、Zero123 等）的问答系统",
+    description="基于 20 篇 ML 论文（扩散模型、NeRF、3D 生成等）的问答系统，支持向量检索 + Reranker 精排",
     examples=[
         "What is the main idea of DDPM and how does the denoising process work?",
-        "How does Zero123 inject camera parameters into the diffusion model?",
+        "How does ControlNet add spatial conditioning to diffusion models?",
         "What are the advantages of 3D Gaussian Splatting over NeRF?",
         "What is classifier-free guidance and why is it useful?",
         "How does DreamFusion generate 3D objects from text?",
     ],
-
 )
 
 if __name__ == "__main__":
