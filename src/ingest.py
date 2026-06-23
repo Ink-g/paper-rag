@@ -99,6 +99,8 @@ def store_chunks(chunks: list[Chunk]):
     embed_model = SentenceTransformer("BAAI/bge-m3")
 
     chroma_client = chromadb.PersistentClient(path="./storage")
+    # 每次重新入库前清空旧数据，避免重复
+    chroma_client.delete_collection("papers")
     collection = chroma_client.get_or_create_collection("papers")
 
     print("正在生成向量并存入数据库...")

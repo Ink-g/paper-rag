@@ -6,8 +6,11 @@
 
 | 方向 | 论文 |
 |------|------|
-| 扩散模型 | DDPM、DDIM、CFG、Stable Diffusion |
-| 3D 生成 | Zero123、Zero123++、DreamFusion、Magic3D、Point-E |
+| 扩散模型基础 | DDPM、DDIM、CFG、Stable Diffusion |
+| 扩散模型应用 | ControlNet、InstructPix2Pix、Imagen、SDXL |
+| 3D 生成 | Zero123、Zero123++、DreamFusion、Magic3D、Point-E、SJC |
+| NeRF 系列 | NeRF、Instant-NGP、3D Gaussian Splatting |
+| 多视角生成 | One-2-3-45、SyncDreamer、Wonder3D |
 
 ## 技术架构
 
@@ -16,7 +19,9 @@
    ↓
 bge-m3 将问题转为向量
    ↓
-ChromaDB 检索最相关的 5 个文本块
+ChromaDB 向量检索，召回 20 个候选文本块
+   ↓
+bge-reranker-v2-m3 精排，取 Top 5
    ↓
 Qwen2.5-7B（本地）生成回答
    ↓
@@ -114,14 +119,14 @@ paper-rag/
 
 ## 评估结果
 
-在 20 个手工标注的测试问题上评估检索质量（Hit Rate@5：正确论文出现在前 5 个检索结果中）：
+在 42 个手工标注的测试问题上评估检索质量（Hit Rate@5：正确论文出现在前 5 个检索结果中）：
 
 | 方法 | Hit Rate@5 |
 |------|-----------|
-| 向量检索（baseline） | 85.0% |
-| 向量检索 + Reranker | 85.0% |
+| 向量检索（baseline） | 85.7% |
+| 向量检索 + Reranker | 90.5% |
 
-> 在当前 9 篇论文、85 个文本块的小规模语料库上，向量检索已达到较高精度，Reranker 的优势在更大规模语料库中会更加明显。
+> 在 20 篇论文、217 个文本块的语料库上，Reranker 相比纯向量检索提升 4.8 个百分点。语料库规模越大，Reranker 的精排优势越明显。
 
 ## 常用命令速查
 
