@@ -1,8 +1,6 @@
-llama-index
+anthropic
 chromadb
 pymupdf
 sentence-transformers
 gradio
-fastapi
-uvicorn
 python-dotenv

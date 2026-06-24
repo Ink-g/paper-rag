@@ -1,34 +1,72 @@
-import requests
 import os
+
+from anthropic import Anthropic
 from dotenv import load_dotenv
+
 from src.retriever import retrieve
 
 load_dotenv()
 
-OLLAMA_URL = "http://localhost:11434/api/generate"
-OLLAMA_MODEL = "qwen2.5:7b"
+client = Anthropic(
+    api_key=os.getenv("ANTHROPIC_API_KEY")
+)
+
+CLAUDE_MODEL = "claude-sonnet-4-6"
 
 
 def ask(question: str, top_k: int = 5) -> tuple[str, list[dict]]:
+    """
+    Retrieve relevant paper chunks and generate an answer using Claude.
+    """
+
     chunks = retrieve(question, top_k=top_k)
 
-    context = "\n\n---\n\n".join([c["text"] for c in chunks])
+    if not chunks:
+        return "No relevant paper excerpts were found.", []
 
-    prompt = f"""You are an expert assistant for machine learning research papers.
-Answer the question based on the provided paper excerpts. Cite the source paper title when referencing specific content.
-If the answer cannot be found in the excerpts, say so clearly.
+    context = "\n\n---\n\n".join(
+        chunk["text"] for chunk in chunks
+    )
 
+    system_prompt = """
+You are an expert assistant for machine learning research papers.
+
+Rules:
+1. Answer ONLY using the provided paper excerpts.
+2. Cite the source paper title whenever possible.
+3. If the answer is not present in the excerpts, explicitly say so.
+4. Do not invent information.
+5. Be concise but technically accurate.
+"""
+
+    user_prompt = f"""
 Paper excerpts:
+
 {context}
 
-Question: {question}
+Question:
+{question}
 
-Answer:"""
+Answer:
+"""
 
-    response = requests.post(OLLAMA_URL, json={
-        "model": OLLAMA_MODEL,
-        "prompt": prompt,
-        "stream": False
-    })
-    response.raise_for_status()
-    return response.json()["response"], chunks
+    message = client.messages.create(
+        model=CLAUDE_MODEL,
+        system=system_prompt,
+        max_tokens=4096,
+        temperature=0,
+        messages=[
+            {
+                "role": "user",
+                "content": user_prompt
+            }
+        ]
+    )
+
+    answer = ""
+
+    for block in message.content:
+        if hasattr(block, "text"):
+            answer += block.text
+
+    return answer.strip(), chunks
