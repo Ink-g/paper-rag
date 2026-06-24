@@ -2,6 +2,8 @@
 
 A RAG (Retrieval-Augmented Generation) system for machine learning research papers. Ask a question and the system retrieves relevant content from the paper corpus, generates an answer using a local LLM, and cites the source papers.
 
+![demo](assets/Paper-RAG.gif)
+
 ## Paper Corpus
 
 | Category | Papers |
