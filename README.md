@@ -34,8 +34,8 @@ Return answer + source papers
 
 - Python 3.11
 - Anaconda / Miniconda
-- Ollama (local LLM)
-- NVIDIA GPU (recommended; CPU also works but slower)
+- An [Anthropic API key](https://console.anthropic.com/settings/keys)
+- NVIDIA GPU (recommended for faster embedding; CPU also works)
 
 ---
 
@@ -43,25 +43,36 @@ Return answer + source papers
 
 ### First-time Setup
 
-**1. Activate the environment**
+**1. Clone the repo and activate the environment**
 
 ```powershell
+git clone https://github.com/Ink-g/paper-rag.git
+cd paper-rag
 conda activate paper-rag
+pip install -r requirements.txt
 ```
 
-**2. Start Ollama**
+**2. Set up your API key**
 
-Ollama runs in the background after installation. If it's not running, open the Ollama app.
-Confirm the Qwen model is downloaded:
+Create a `.env` file in the project root:
 
-```powershell
-ollama pull qwen2.5:7b
+```
+ANTHROPIC_API_KEY=your_api_key_here
 ```
 
-**3. Launch the interface**
+Get your key at [console.anthropic.com](https://console.anthropic.com/settings/keys).
+
+**3. Build the vector database**
 
 ```powershell
-cd D:\Projects\paper-rag
+python src/ingest.py
+```
+
+This downloads the bge-m3 embedding model (~2GB on first run) and indexes all 20 papers into ChromaDB.
+
+**4. Launch the interface**
+
+```powershell
 python app.py
 ```
 
